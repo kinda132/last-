@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Druv's Epic Birthday Surprise from Kunal</title>
+    <!-- Load Tailwind CSS for utility classes only -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS Styles - Enhanced design and complexity -->
+    <style>
+        /* ========================================================================= */
+        /* [1] GLOBAL & FONT SETUP */
+        /* ========================================================================= */
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
+
+        :root {
+            /* Theme Variables */
+            --color-bg-light: #dbeafe; /* Sky 200 */
+            --color-primary: #e74c3c; /* Bright Red Box */
+            --color-secondary: #c0392b; /* Darker Red Lid */
+            --color-accent: #f1c40f; /* Gold Ribbon */
+            --color-text-dark: #333;
+            --color-leaf-shadow-primary: rgba(16, 185, 129, 0.4); /* Emerald Green */
+            --color-leaf-shadow-secondary: rgba(52, 211, 153, 0.3); /* Lighter Green */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-light);
+            /* Subtle background pattern for texture */
+            background-image: radial-gradient(circle, #bfdbfe 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        /* ========================================================================= */
+        /* [2] MAIN GIFT CANVAS & FOLIAGE EFFECT (Leaf Veins) */
+        /* ========================================================================= */
+        
+        .gift-canvas {
+            /* Leaf-vein effect using complex layered shadows */
+            box-shadow: 
+                0 0 80px 30px var(--color-leaf-shadow-primary), /* Primary Leaf Blur */
+                0 0 40px 15px var(--color-leaf-shadow-secondary), /* Secondary Leaf Hint */
+                0 10px 30px rgba(0, 0, 0, 0.1); /* Standard Card Shadow */
+            
+            background-color: white; /* Card background */
+            padding: 3rem;
+            border-radius: 20px;
+            max-width: 90%;
+            width: 500px; /* Base width for centering */
+        }
+
+        /* ========================================================================= */
+        /* [3] GIFT BOX STRUCTURE */
+        /* ========================================================================= */
+        
+        .gift-container {
+            position: relative;
+            width: 300px;
+            height: 250px;
+            perspective: 1000px; /* For 3D rotation */
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Box Base (Holds the message) */
+        .gift-base {
+            width: 100%;
+            height: 100%;
+            background: var(--color-primary);
+            border: 4px solid var(--color-secondary);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.5s ease-in-out;
+            transform-origin: bottom;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Box Lid (The clickable part) */
+        .gift-lid {
+            width: 110%;
+            height: 50px;
+            background: var(--color-secondary);
+            border: 4px solid #992d22;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: -20px;
+            left: -5%;
+            z-index: 10;
+            border-radius: 8px;
+            /* Cubic Bezier: For a 'bounce' effect */
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transform-origin: 50% 100%;
+            cursor: pointer;
+        }
+
+        /* Lid open state (3D rotation when open) */
+        .gift-lid.open {
+            transform: translateZ(50px) rotateX(-90deg) translateY(-20px);
+        }
+
+        /* Ribbon Decoration */
+        .ribbon {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 30px;
+            height: 100%;
+            background: var(--color-accent); /* Gold */
+            transform: translateX(-50%);
+            z-index: 11;
+        }
+
+        /* Ribbon Bow */
+        .ribbon::before, .ribbon::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            width: 30px;
+            height: 30px;
+            background: #f39c12; 
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .ribbon::before { left: -30px; }
+        .ribbon::after { right: -30px; }
+
+        /* ========================================================================= */
+        /* [4] TEXT & MESSAGE STYLES */
+        /* ========================================================================= */
+
+        .gift-message {
+            opacity: 0;
+            transition: opacity 1s 0.7s;
+            font-family: 'Dancing Script', cursive; /* Elegant font for the message */
+            color: var(--color-text-dark);
+            font-size: 1.5rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .gift-message.visible {
+            opacity: 1;
+        }
+        
+        /* The signature style (From your best friend Kunal) */
+        #kunal-signature {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Corner Text (HAPPY BIRTHDAY DRUV) styling */
+        .corner-text {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 2rem; 
+            white-space: nowrap; /* Prevent wrapping */
+            font-size: 3rem; /* Bigger size */
+            letter-spacing: 0.8rem; /* Wide spacing */
+            color: #1f2937; /* Tailwind Gray-900 */
+        }
+
+        /* Desktop Positioning (Maintains far distance) */
+        @media (min-width: 1024px) { /* Changed from md to lg for wider spacing */
+            .corner-text-left {
+                left: -400px; /* Pushed much further to the left */
+                transform: translate(0, -50%) rotate(-90deg);
+            }
+            .corner-text-right {
+                right: -400px; /* Pushed much further to the right */
+                transform: translate(0, -50%) rotate(90deg);
+            }
+        }
+        
+        /* ========================================================================= */
+        /* [5] CONFETTI PARTICLE STYLES & ANIMATION KEYFRAMES */
+        /* ========================================================================= */
+
+        /* Basic confetti style */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            pointer-events: none;
+            /* Transition is now handled by JS for complex physics */
+        }
+        
+        /* Keyframes for a more advanced animation model */
+        @keyframes fade-out-fall {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(500px) rotate(1080deg); }
+        }
+
+    </style>
+</head>
+<body class="p-4">
+
+    <!-- MAIN CONTAINER - gift-canvas class adds the leafy-style green shadow -->
+    <main class="flex flex-col items-center gift-canvas relative">
+
+        <!-- LEFT SIDE TEXT: HAPPY BIRTHDAY DRUV (In the corner, prevents overlap) -->
+        <div class="corner-text corner-text-left font-black opacity-70 tracking-widest hidden lg:block">
+            HAPPY BIRTHDAY DRUV
+        </div>
+
+        <!-- RIGHT SIDE TEXT: HAPPY BIRTHDAY DRUV (In the corner, prevents overlap) -->
+        <div class="corner-text corner-text-right font-black opacity-70 tracking-widest hidden lg:block">
+            HAPPY BIRTHDAY DRUV
+        </div>
+
+        <!-- Main Title -->
+        <h1 id="main-title" class="text-3xl sm:text-4xl font-black text-gray-800 mb-8 text-center transition-opacity duration-500">
+            A Special Gift for You!
+        </h1>
+
+        <!-- The Gift Box Assembly -->
+        <div id="gift-box" class="gift-container">
+            
+            <!-- Gift Base (where the message is hidden) -->
+            <div id="gift-base" class="gift-base">
+                
+                <!-- Birthday Message (Revealed when the box opens) -->
+                <p id="message-text" class="gift-message">
+                    **Happy Birthday, my friend Druv!** 🎉<br>
+                    May this year be awesome, fun, and epic for you!<br>
+                    Lots of love, fun, and I'll always be here for you!<br>
+                    
+                    <!-- Closing message inside the box -->
+                    <span class="font-black text-3xl mt-6 block text-yellow-300" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">From your best friend!</span>
+                </p>
+                
+                <!-- Click Prompt (Initially visible) -->
+                <p id="click-prompt" class="text-white text-xl font-bold transition-opacity duration-300">
+                    Click to open the gift!
+                </p>
+            </div>
+
+            <!-- Gift Lid (The clickable part) -->
+            <div id="gift-lid" class="gift-lid shadow-xl">
+                <div class="ribbon"></div>
+                <!-- Lid Title -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                     <span class="text-white font-extrabold text-2xl tracking-widest" style="text-shadow: 0 0 5px rgba(0,0,0,0.5);">GIFT</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Button -->
+        <button id="reset-button" class="mt-12 px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-xl hover:bg-indigo-600 transition duration-300 opacity-0 pointer-events-none" onclick="resetGift()">
+            Re-wrap Gift
+        </button>
+        
+        <!-- Signature Line (Kunal's name and best friend status, bold and clear) -->
+        <p id="kunal-signature" class="text-xl text-gray-800 mt-4 font-black transition-opacity duration-500 opacity-0 pointer-events-none tracking-wider">
+            From your best friend Kunal
+        </p>
+
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- JAVASCRIPT LOGIC - Added complexity for the 'dab op' effect -->
+    <!-- ========================================================================= -->
+    <script>
+        // DOM Elements
+        const giftLid = document.getElementById('gift-lid');
+        const messageText = document.getElementById('message-text');
+        const clickPrompt = document.getElementById('click-prompt');
+        const giftBase = document.getElementById('gift-base');
+        const mainTitle = document.getElementById('main-title');
+        const resetButton = document.getElementById('reset-button');
+        const kunalSignature = document.getElementById('kunal-signature');
+        let isOpened = false;
+
+        /**
+         * Converts milliseconds to a CSS transition delay string (seconds).
+         * @param {number} ms - Delay in milliseconds.
+         * @returns {string} - Delay string (e.g., '0.5s').
+         */
+        function msToSeconds(ms) {
+            return `${ms / 1000}s`;
+        }
+
+        /**
+         * Confetti Particle Generation and Complex Animation Physics.
+         * (Generating confetti particles and applying complex physics)
+         */
+        function sprinkleConfetti() {
+            // High-energy color palette for an epic party
+            const colors = ['#f7d700', '#ff8585', '#4ecdc4', '#3c9cff', '#ff3d67', '#9b59b6', '#34d399', '#f39c12', '#ffa07a', '#7fffd4'];
+            const container = giftBase.parentElement;
+            const fragment = document.createDocumentFragment();
+            const count = 120; // Maximum number of particles for an epic burst
+
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                // Varying sizes and shapes for visual interest
+                confetti.style.width = confetti.style.height = `${Math.random() * 8 + 4}px`; 
+                if (Math.random() > 0.6) {
+                    confetti.style.borderRadius = '50%'; // Circles
+                } else if (Math.random() > 0.3) {
+                     confetti.style.transform = 'skew(20deg)'; // Skewed rectangles
+                } else {
+                    confetti.style.borderRadius = '2px'; // Squares
+                }
+
+
+                // Initial Position (Originating from the center of the gift box)
+                const startX = (container.offsetWidth / 2) + (Math.random() * 80 - 40);
+                const startY = (container.offsetHeight / 2);
+
+                confetti.style.left = `${startX}px`;
+                confetti.style.top = `${startY}px`;
+
+                // Calculate the final trajectory with complex factors
+                const maxHorizontalSpread = 800;
+                const maxVerticalAscent = 600;
+                
+                // Randomness in direction and distance
+                const finalX = startX + (Math.random() * maxHorizontalSpread - (maxHorizontalSpread / 2));
+                const finalY = startY - (Math.random() * maxVerticalAscent + 150); 
+                const initialRotation = Math.random() * 360;
+                const finalRotation = initialRotation + Math.random() * 1080; // Multiple rotations
+                const delay = Math.random() * 300; // Staggered release
+
+                // Add a complex gravity-like fall transition
+                confetti.style.transition = `transform 2.0s ease-out ${msToSeconds(delay)}, opacity 1.5s ease-in ${msToSeconds(delay + 500)}`;
+
+                fragment.appendChild(confetti);
+
+                // Apply initial opacity and final transform after a small timeout
+                setTimeout(() => {
+                    confetti.style.opacity = 1;
+                    // Transformation includes movement and rotation
+                    confetti.style.transform = `translate(${finalX - startX}px, ${finalY - startY}px) rotate(${finalRotation}deg)`;
+                }, 50);
+
+                // Remove the confetti particles after the animation is complete
+                setTimeout(() => {
+                    confetti.remove();
+                }, 2500 + delay); 
+            }
+            container.appendChild(fragment);
+        }
+
+        /**
+         * Handles the main click event to open the gift.
+         * (Handles the main click event to open the gift)
+         */
+        function openGift() {
+            if (isOpened) return;
+            isOpened = true;
+
+            // 1. Lid animation
+            giftLid.classList.add('open');
+            giftLid.style.cursor = 'default';
+
+            // 2. Message reveal
+            clickPrompt.style.opacity = '0';
+            setTimeout(() => {
+                clickPrompt.classList.add('hidden');
+                messageText.classList.add('visible');
+            }, 300);
+
+            // 3. Title change
+            mainTitle.textContent = "It's For You, Druv!";
+
+            // 4. Confetti effect
+            setTimeout(sprinkleConfetti, 500);
+
+            // 5. Show controls and signature
+            setTimeout(() => {
+                resetButton.classList.remove('opacity-0', 'pointer-events-none');
+                kunalSignature.classList.remove('opacity-0', 'pointer-events-none');
+            }, 1000);
+        }
+
+        /**
+         * Resets the gift box back to its initial state.
+         * (Resets the gift box back to its initial state)
+         */
+        function resetGift() {
+            if (!isOpened) return;
+            isOpened = false;
+
+            // 1. Closing the lid
+            giftLid.classList.remove('open');
+            giftLid.style.cursor = 'pointer';
+
+            // 2. Hiding the message
+            messageText.classList.remove('visible');
+            setTimeout(() => {
+                clickPrompt.classList.remove('hidden');
+                clickPrompt.style.opacity = '1';
+            }, 500); 
+
+            // 3. Resetting the title
+            mainTitle.textContent = "A Special Gift for You!";
+
+            // 4. Hiding controls and signature
+            resetButton.classList.add('opacity-0', 'pointer-events-none');
+            kunalSignature.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Event listeners
+        giftLid.addEventListener('click', openGift);
+        giftBase.addEventListener('click', openGift);
+    </script>
+</body>
+</html>
